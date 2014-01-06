@@ -3,7 +3,7 @@ LinkScraper
 
 A "Proof of Concept" URL scraper built on ColdFusion 10 and jSoup that will scrape all links from a supplied website address.
 
-Becuase of how many links that could be, use at your own risk. Preferably in a dev environment first.
+Because of how many links that could be, use at your own risk. Preferably in a dev environment first.
 
 This version requires ColdFusion 10 or the Railo equivalent.
 
