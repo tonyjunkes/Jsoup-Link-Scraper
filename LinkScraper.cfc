@@ -12,9 +12,9 @@ component name="LinkScraper"
 		output="false"
 	{
 		var jsoup = createObject("java", "org.jsoup.Jsoup");
-		var link = href = value = "";
+		var link = var href = var value = "";
 		var lengths = {};
-		var links = lts = ltns = match = result = [];
+		var links = var lts = var ltns = var match = var result = [];
 		var i = 0;
 
         if (!reFindNoCase(left(VARIABLES.website, 7), "http://")) {
