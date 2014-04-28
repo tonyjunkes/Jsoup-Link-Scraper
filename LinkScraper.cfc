@@ -30,25 +30,22 @@ component name="LinkScraper"
 		}
 		//Pass over each link URL initially collected and continue to scrape "unique" links found on those pages.
 		while (arrayLen(lts)) {
-			arrayEach(
-				lts,
-				function(x) {
-					if (!urlFilter(value = x, filterList = VARIABLES.filter) && !arrayContains(ltns, x)) {
-						ltns.append(x);
-						//"ignoreContentType" is used in case we hit a non-HTML page like XML.
-						match = jsoup.connect(x).timeout(100000).ignoreContentType(true).get().select("a[href]");
-						for (href in match) {
-							link = href.attr("abs:href");
-							if (find(VARIABLES.website, link) && !arrayContains(ltns, link)) {
-								arrayAppend(lts, link);
-							} else if (!arrayContains(ltns, link)) {
-								arrayAppend(ltns, link);
-							}
+			arrayEach(lts, function(x) {
+				if (!urlFilter(value = x, filterList = VARIABLES.filter) && !arrayContains(ltns, x)) {
+					ltns.append(x);
+					//"ignoreContentType" is used in case we hit a non-HTML page like XML.
+					match = jsoup.connect(x).timeout(100000).ignoreContentType(true).get().select("a[href]");
+					for (href in match) {
+						link = href.attr("abs:href");
+						if (find(VARIABLES.website, link) && !arrayContains(ltns, link)) {
+							arrayAppend(lts, link);
+						} else if (!arrayContains(ltns, link)) {
+							arrayAppend(ltns, link);
 						}
 					}
-					arrayDelete(lts, x);
 				}
-			);
+				arrayDelete(lts, x);
+			});
 		}
 		//Attempt a more ordered sort for the final array of urls.
 		for (i = 1; i <= arrayLen(ltns); i++) {
