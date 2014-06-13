@@ -14,7 +14,7 @@ component name="LinkScraper"
 		var jsoup = createObject("java", "org.jsoup.Jsoup");
 		var link = var href = var value = "";
 		var lengths = {};
-		var links = var lts = var ltns = var match = var result = [];
+		var links = var lts = var ltns = var match = [];
 		var i = 0;
 
         if (!reFindNoCase(left(VARIABLES.website, 7), "http://")) {
@@ -47,16 +47,9 @@ component name="LinkScraper"
 				arrayDelete(lts, x);
 			});
 		}
-		//Attempt a more ordered sort for the final array of urls.
-		for (i = 1; i <= arrayLen(ltns); i++) {
-    		lengths[i] = listLen(ltns[i], "/");
-		}
-		lengths = structSort(lengths, "numeric", "asc");
-		for (value in lengths) {
-    		arrayAppend(result, ltns[value]);
-		}
+		arraySort(ltns, "textnocase", "asc");
 
-		return result;
+		return ltns;
 	}
 
 	private boolean function urlFilter(required string value = "", required array filterList = [])
