@@ -1,69 +1,64 @@
 component name="LinkScraper"
 	output="false"
 {
-	public any function init(required website = "", array filter = []) {
-		VARIABLES.website = ARGUMENTS.website;
-		VARIABLES.filter = ARGUMENTS.filter;
-
-		return THIS;
-	}
-
-	public array function scrapeLinks()
+	public any function init(required website = "")
 		output="false"
 	{
-		var jsoup = createObject("java", "org.jsoup.Jsoup");
-		var link = var href = var value = "";
-		var lengths = {};
-		var links = var lts = var ltns = var match = [];
-		var i = 0;
+		variables.jSoup = createObject("java", "org.jsoup.Jsoup");
+        variables.website = (
+        	!findNoCase(left(arguments.website, 7), "http://")
+            ? "http://" & arguments.website : arguments.website
+        );
 
-        if (!reFindNoCase(left(VARIABLES.website, 7), "http://")) {
-            VARIABLES.website = "http://" & VARIABLES.website;
-        }
-        links = jsoup.connect(VARIABLES.website).timeout(100000).get().select("a[href]");
+		return this;
+	}
+
+	public array function scrapeLinks(array filter = [])
+		output="false"
+	{
+		var link = var href = "";
+		var links = var linksToSearch = var linkResults = [];
+		// jSoup connection closure
+		var connect = function(u) {
+			//"ignoreContentType" is used in case we hit a non-HTML page like XML.
+			return variables.jSoup.connect(u).timeout(100000).ignoreContentType(true).get().select("a[href]");
+		};
+		// URL filter closure
+		var urlFilter = function(f, v) { 
+			return arrayLen(arrayFilter(f, function(e) { return find(e, v); })) ? true : false;
+		};
+		// Link extraction closure
+		var extractLinks = function(link) {
+			if (!urlFilter(filter, link) && !arrayContains(linkResults, link)) {
+				arrayAppend(linkResults, link);
+				links = connect(link);
+				for (href in links) {
+					link = href.attr("abs:href");
+					if (find(variables.website, link) && !arrayContains(linkResults, link)) {
+						arrayAppend(linksToSearch, link);
+					} else if (!arrayContains(linkResults, link)) {
+						arrayAppend(linkResults, link);
+					}
+				}
+			}
+		};
 		//Initial pass over first page to gather starting links to scrape.
+		links = connect(variables.website);
 		for (href in links) {
 			link = href.attr("abs:href");
-			if (find(VARIABLES.website, link) && !urlFilter(value = link, filterList = VARIABLES.filter) && !arrayContains(lts, link)) {
-				arrayAppend(lts, link);
+			if (find(variables.website, link)) {
+				extractLinks(link);
 			}
 		}
 		//Pass over each link URL initially collected and continue to scrape "unique" links found on those pages.
-		while (arrayLen(lts)) {
-			arrayEach(lts, function(x) {
-				if (!urlFilter(value = x, filterList = VARIABLES.filter) && !arrayContains(ltns, x)) {
-					ltns.append(x);
-					//"ignoreContentType" is used in case we hit a non-HTML page like XML.
-					match = jsoup.connect(x).timeout(100000).ignoreContentType(true).get().select("a[href]");
-					for (href in match) {
-						link = href.attr("abs:href");
-						if (find(VARIABLES.website, link) && !arrayContains(ltns, link)) {
-							arrayAppend(lts, link);
-						} else if (!arrayContains(ltns, link)) {
-							arrayAppend(ltns, link);
-						}
-					}
-				}
-				arrayDelete(lts, x);
+		while (arrayLen(linksToSearch)) {
+			arrayEach(linksToSearch, function(link) {
+				extractLinks(link);
+				arrayDelete(linksToSearch, link);
 			});
 		}
-		arraySort(ltns, "textnocase", "asc");
+		arraySort(linkResults, "textnocase", "asc");
 
-		return ltns;
-	}
-
-	private boolean function urlFilter(required string value = "", required array filterList = [])
-		output="false"
-	{
-		var item = "";
-		var result = false;
-
-		for (item in ARGUMENTS.filterList) {
-			if (find(item, ARGUMENTS.value)) {
-				result = true;
-			}
-		}
-
-		return result;
+		return linkResults;
 	}
 }
