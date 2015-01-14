@@ -13,7 +13,7 @@ component name="LinkScraper"
 		return this;
 	}
 
-	public array function scrapeLinks(array filter = [])
+	public array function scrapeLinks(array filter = [], boolean respectRelFollow = true)
 		output="false"
 	{
 		var link = var href = "";
@@ -21,7 +21,7 @@ component name="LinkScraper"
 		// jSoup connection closure
 		var connect = function(u) {
 			//"ignoreContentType" is used in case we hit a non-HTML page like XML.
-			return variables.jSoup.connect(u).timeout(100000).ignoreContentType(true).get().select("a[href]");
+			return variables.jSoup.connect(u).timeout(100000).ignoreContentType(true).get().select("a");
 		};
 		// URL filter closure
 		var urlFilter = function(f, v) { 
@@ -33,7 +33,9 @@ component name="LinkScraper"
 				arrayAppend(linkResults, link);
 				links = connect(link);
 				for (href in links) {
-					link = href.attr("abs:href");
+					if (respectRelFollow && href.attr("rel") != "nofollow") {
+						link = href.attr("abs:href");
+					}
 					if (find(variables.website, link) && !arrayContains(linkResults, link)) {
 						arrayAppend(linksToSearch, link);
 					} else if (!arrayContains(linkResults, link)) {
@@ -45,7 +47,9 @@ component name="LinkScraper"
 		//Initial pass over first page to gather starting links to scrape.
 		links = connect(variables.website);
 		for (href in links) {
-			link = href.attr("abs:href");
+			if (arguments.respectRelFollow && href.attr("rel") != "nofollow") {
+				link = href.attr("abs:href");
+			}
 			if (find(variables.website, link)) {
 				extractLinks(link);
 			}
