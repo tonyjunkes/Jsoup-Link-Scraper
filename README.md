@@ -1,7 +1,7 @@
 LinkScraper
 ===========================
 
-A "Proof of Concept" URL scraper built on ColdFusion and jSoup that will scrape all &lta&gt links from a supplied URL address.
+A "Proof of Concept" URL scraper built on ColdFusion and JSoup that will scrape all &lta&gt links from a supplied URL address.
 
 This version runs with JSoup 1.8.1 and requires ColdFusion 10+ or the Railo equivalent.
 
