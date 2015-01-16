@@ -9,7 +9,6 @@ component name="LinkScraper"
         	!findNoCase(left(arguments.website, 7), "http://")
         	? "http://" & arguments.website : arguments.website
         );
-
 		return this;
 	}
 
