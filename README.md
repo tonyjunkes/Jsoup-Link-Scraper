@@ -1,7 +1,7 @@
 LinkScraper
 ===========================
 
-A "Proof of Concept" URL scraper built on ColdFusion and JSoup that will scrape all &lta&gt links from a supplied URL address.
+A "Proof of Concept" URL scraper built on ColdFusion and JSoup that will scrape all &lt;a&gt; links from a supplied URL address.
 
 This version runs with JSoup 1.8.1 and requires ColdFusion 10+ or the Railo equivalent.
 
@@ -10,7 +10,7 @@ This version runs with JSoup 1.8.1 and requires ColdFusion 10+ or the Railo equi
 In general, using the `LinkScraper.cfc` is as simple as the example below.
 
 ```
-x = createObject("component", "path.to.LinkScraper").init("your-site.com").scrapeLinks()
+x = createObject("component", "path.to.LinkScraper").init("your-site.com").scrapeLinks();
 writeDump(x);
 ```
 
