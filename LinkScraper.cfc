@@ -6,9 +6,9 @@ component name="LinkScraper"
 	{
 		variables.jSoup = createObject("java", "org.jsoup.Jsoup");
 		variables.website = (
-        		!findNoCase(left(arguments.website, 7), "http://")
-        		? "http://" & arguments.website : arguments.website
-        	);
+			!findNoCase(left(arguments.website, 7), "http://")
+			? "http://" & arguments.website : arguments.website
+		);
         	
 		return this;
 	}
