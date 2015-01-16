@@ -1,14 +1,27 @@
 LinkScraper
 ===========================
 
-A "Proof of Concept" URL scraper built on ColdFusion 10 and jSoup that will scrape all links from a supplied website address.
+A "Proof of Concept" URL scraper built on ColdFusion and jSoup that will scrape all &lta&gt links from a supplied URL address.
 
-Because of how many links that could be, use at your own risk. Preferably in a dev environment first.
+This version runs with JSoup 1.8.1 and requires ColdFusion 10+ or the Railo equivalent.
 
-This version requires ColdFusion 10 or the Railo equivalent.
+## To Get Started...
 
-The example call in index.cfm grabs the raw return from the scrapeLinks() method in LinkScraper.cfc which returns an array of url addresses. Just add a wensite address to the "siteaddress" variable.
+In general, using the `LinkScraper.cfc` is as simple as the example below.
 
-The scrapeLinks() method allows for an array of values to be passed in as filters against what to return.
+```
+x = createObject("component", "path.to.LinkScraper").init("your-site.com").scrapeLinks()
+writeDump(x);
+```
 
-NOTE: Filters are your friend as in some cases you could be thrown into the equivalent of a infinite loop. Imagine scraping a calender app with links to future and past dates. Ouch ;)
+There is also an example call in the `index.cfm` that dumps the raw return (an array of URL addresses) from the `scrapeLinks()` method in `LinkScraper.cfc`. Just add a URL address to the `siteaddress` variable in `index.cfm` and run the file.
+
+## Filters Are Your Friend!
+
+The `scrapeLinks()` method can take a few arguments for filtering data. Most have default values already set so the scraper can automatically play nice and not get you in too much of a bind. I've never tested the code on a large site so there's no promises on processing time or errors along the way. In certain cases, you can find yourself practically endless looping over links (think calendars etc.).
+
+Here's what can help with those issues:
+
+- `filter` : An array of strings to search against in a URL to not be included. Defaults to `[]`.
+- `skipRelFollow` : A boolean value signaling whether to follow links with the attribute `rel="nofollow"`. Defaults to `true`.
+- includeExternalLinks : A boolean value signaling whether to collect links that aren't specific to the supplied domain. Defaults to `true`.
