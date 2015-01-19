@@ -5,5 +5,5 @@
 <cfset siteAddress = "">
 
 <cfscript>
-	writeDump(createObject("component", "LinkScraper").init(website = siteAddress).scrapeLinks(filter = [chr(35)]));
+	writeDump(createObject("component", "LinkScraper").init(website = siteAddress).scrapeLinks(filter = [chr(35)], skipRelFollow = true, includeExternalLinks = false));
 </cfscript>
