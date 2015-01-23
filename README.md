@@ -24,4 +24,4 @@ Here's what can help with those issues:
 
 - `filter` : An array of strings to search against in a URL to not be included. Defaults to `[]`.
 - `skipRelFollow` : A boolean value signaling whether to follow links with the attribute `rel="nofollow"`. Defaults to `true`.
-- includeExternalLinks : A boolean value signaling whether to collect links that aren't specific to the supplied domain. Defaults to `true`.
+- `includeExternalLinks` : A boolean value signaling whether to collect links that aren't specific to the supplied domain. Defaults to `true`.
