@@ -9,9 +9,9 @@ This version runs with JSoup 1.8.2 and requires ColdFusion 10+ or the Railo/Luce
 
 In general, using the `LinkScraper.cfc` is as simple as the example below.
 
-```
-x = createObject("component", "path.to.LinkScraper").init("your-site.com").scrapeLinks();
-writeDump(x);
+```coldfusion-cfc
+x = createObject("component", "path.to.LinkScraper").init("your-site.com");
+writeDump( x.scrapeLinks() );
 ```
 
 There is also an example call in the `index.cfm` that dumps the raw return (an array of URL addresses) from the `scrapeLinks()` method in `LinkScraper.cfc`. Just add a URL address to the `siteaddress` variable in `index.cfm` and run the file.
