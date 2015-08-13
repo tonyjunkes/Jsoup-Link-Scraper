@@ -42,13 +42,7 @@ component name="LinkScraper"
 			arrayEach(linksToSearch, function(href) {
 				if (!urlFilter(filter, href) && !arrayFind(linkResults, href)) {
 					arrayAppend(linkResults, href);
-					try {
-						if (findNoCase(left(href, 8), "https://")) {
-							match = connect(href);
-						} else {
-							match = connect(href);
-						}
-					}
+					try { match = connect(href); }
 					catch(any e) { arrayDelete(linksToSearch, href); }
 					if (skipRelFollow) {
 						match = arrayFilter(match, function(e) { return e.attr("rel") != "nofollow"; });
